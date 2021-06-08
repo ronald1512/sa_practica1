@@ -15,7 +15,8 @@ pipeline {
 
     stage('build') {
       steps {
-        echo "build"
+        sh "docker build -t frontend ."
+        sh "docker run -d -p 80:80 frontend"
       }
     }
 
