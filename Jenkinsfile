@@ -15,7 +15,7 @@ pipeline {
 
     stage('build') {
       steps {
-        sh "docker stop $(docker ps -a -q)"
+        sh "docker stop \$(docker ps -a -q)"
         sh "docker build -t frontend ."
         sh "docker run -d -p 80:80 frontend"
       }
