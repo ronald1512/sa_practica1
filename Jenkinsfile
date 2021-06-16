@@ -1,9 +1,14 @@
 pipeline {
   agent {label 'master'}
   stages {
+    stage('SCM Checkout'){
+      steps{
+        git 'https://github.com/ronald1512/sa_practica1'
+      }
+    }
     stage('install') {
       steps {
-          sh "npm install"
+        sh "npm install"
       }
     }
 
@@ -15,9 +20,19 @@ pipeline {
 
     stage('build') {
       steps {
-        echo '''docker stop $(docker ps -a -q)'''
-        echo "docker build -t frontend ."
-        echo "docker run -d -p 80:80 frontend"
+        sh "docker build . -t romerog1512/frontend:latest"
+      }
+    }
+    stage('DockerHub Push') {
+      steps {
+        sh "docker login -u romerog1512 -p VzntH?^T/cM.g7]"
+        sh "docker push romerog1512/frontend:latest"
+        sh "docker logout"
+      }
+    }
+    stage('Docker run'){
+      steps {
+        sh "docker run -d -p 80:80 romerog1512/frontend:staging"
       }
     }
 
