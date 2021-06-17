@@ -24,16 +24,16 @@ pipeline {
       }
     }
     stage('DockerHub Push') {
-      steps {
-        sh "docker login -u romerog1512 -p VzntH?^T/cM.g7]"
-        sh "docker push romerog1512/frontend:latest"
-        sh "docker logout"
-      }
+        steps {
+            sh "docker login -u romerog1512 -p VzntH?^T/cM.g7]"
+            sh "docker push romerog1512/frontend:latest"
+            sh "docker logout"
+        }
     }
-    stage('Docker run'){
-      steps {
-        sh "docker run -d -p 80:80 romerog1512/frontend:staging"
-      }
+    stage('Docker Deploy'){
+        steps{
+            ansiblePlaybook credentialsId: 'dev-server', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'dev.inv', playbook: 'deploy-docker.yml'
+        }
     }
 
   }
